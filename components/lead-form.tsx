@@ -262,7 +262,7 @@ export function LeadForm() {
       setIsSubmitting(true)
       try {
         await fetch(
-          "https://services.leadconnectorhq.com/hooks/ESXofJNHbRPkOF25Yiyj/webhook-trigger/a7eb3c99-55aa-428a-8db2-0f5023623faf",
+          "https://services.leadconnectorhq.com/hooks/ESXofJNHbRPkOF25Yiyj/webhook-trigger/Wg87a8lNfjfHzR7TOaph",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
