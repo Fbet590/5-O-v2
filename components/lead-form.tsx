@@ -317,6 +317,14 @@ export function LeadForm() {
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-xl">
+          <div className="text-center mb-8">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground text-balance">
+              See If You Qualify for Our $5K Outdoor Transformation
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg leading-relaxed max-w-md mx-auto">
+              Answer 4 quick questions and we&apos;ll reach out with a free estimate — no pressure, no obligation. Takes less than 60 seconds.
+            </p>
+          </div>
           <div className="rounded-2xl border border-border bg-card p-6 sm:p-10 shadow-sm">
             {submitted ? (
               <SuccessState />
