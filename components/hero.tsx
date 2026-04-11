@@ -21,7 +21,7 @@ export function Hero() {
             Premium Outdoor Solutions
           </p>
           <h1 className="font-serif font-black text-5xl leading-tight tracking-tight text-primary-foreground sm:text-6xl lg:text-7xl text-balance">
-            Building Dreams Brick by Brick
+            $5K. New Turf. New Pavers. New Outdoor Space. Done.
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-primary-foreground/90 max-w-xl">
             Transform your yard into a neighborhood showpiece with our expert artificial turf, putting green, and paver installations. Year-round perfection, zero maintenance.
