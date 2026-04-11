@@ -16,7 +16,7 @@ import {
   CheckCircle,
 } from "lucide-react"
 
-const TOTAL_STEPS = 4
+const TOTAL_STEPS = 3
 
 interface FormData {
   projectTypes: string[]
@@ -36,21 +36,6 @@ const initialFormData: FormData = {
   phone: "",
 }
 
-const flexibilityOptions = [
-  {
-    value: "yes",
-    label: "Yes, I prefer premium quality even if the cost increases slightly",
-  },
-  {
-    value: "maybe",
-    label: "Maybe, depends on the options presented",
-  },
-  {
-    value: "no",
-    label: "No, I have a fixed budget",
-  },
-]
-
 function ProgressBar({ currentStep }: { currentStep: number }) {
   const progress = ((currentStep + 1) / TOTAL_STEPS) * 100
 
@@ -69,47 +54,6 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
           className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
           style={{ width: `${progress}%` }}
         />
-      </div>
-    </div>
-  )
-}
-
-function StepFlexibility({
-  formData,
-  setFormData,
-}: {
-  formData: FormData
-  setFormData: (data: FormData) => void
-}) {
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h3 className="font-serif text-2xl tracking-tight text-foreground sm:text-3xl text-balance">
-          Are you flexible with your budget to guarantee premium-quality
-          materials and workmanship?
-        </h3>
-      </div>
-      <div className="flex flex-col gap-3">
-        {flexibilityOptions.map((option) => (
-          <button
-            key={option.value}
-            type="button"
-            onClick={() =>
-              setFormData({
-                ...formData,
-                budgetFlexibility: option.value,
-              })
-            }
-            className={cn(
-              "rounded-xl border-2 p-5 text-left font-medium leading-relaxed transition-all",
-              formData.budgetFlexibility === option.value
-                ? "border-primary bg-primary/5 text-foreground"
-                : "border-border bg-card text-foreground hover:border-primary/40"
-            )}
-          >
-            {option.label}
-          </button>
-        ))}
       </div>
     </div>
   )
@@ -143,10 +87,14 @@ function StepName({
 function StepEmail({
   formData,
   setFormData,
+  isValid,
 }: {
   formData: FormData
   setFormData: (data: FormData) => void
+  isValid: boolean
 }) {
+  const showError = formData.email.trim() !== "" && !isValid
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -154,14 +102,24 @@ function StepEmail({
           {"What's your email address?"}
         </h3>
       </div>
-      <Input
-        type="email"
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        placeholder="you@example.com"
-        className="h-14 text-lg rounded-xl px-5"
-        autoFocus
-      />
+      <div>
+        <Input
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          placeholder="you@example.com"
+          className={cn(
+            "h-14 text-lg rounded-xl px-5",
+            showError && "border-red-500 focus-visible:ring-red-500"
+          )}
+          autoFocus
+        />
+        {showError && (
+          <p className="mt-2 text-sm text-red-500">
+            Please enter a valid email address
+          </p>
+        )}
+      </div>
     </div>
   )
 }
@@ -169,10 +127,15 @@ function StepEmail({
 function StepPhone({
   formData,
   setFormData,
+  isValid,
 }: {
   formData: FormData
   setFormData: (data: FormData) => void
+  isValid: boolean
 }) {
+  const digitsOnly = formData.phone.replace(/\D/g, '')
+  const showError = digitsOnly.length >= 10 && !isValid
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -180,14 +143,24 @@ function StepPhone({
           {"What's the best mobile number to reach you on?"}
         </h3>
       </div>
-      <Input
-        type="tel"
-        value={formData.phone}
-        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-        placeholder="(555) 123-4567"
-        className="h-14 text-lg rounded-xl px-5"
-        autoFocus
-      />
+      <div>
+        <Input
+          type="tel"
+          value={formData.phone}
+          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          placeholder="(555) 123-4567"
+          className={cn(
+            "h-14 text-lg rounded-xl px-5",
+            showError && "border-red-500 focus-visible:ring-red-500"
+          )}
+          autoFocus
+        />
+        {showError && (
+          <p className="mt-2 text-sm text-red-500">
+            Please enter a valid 10-digit US phone number
+          </p>
+        )}
+      </div>
     </div>
   )
 }
@@ -237,16 +210,30 @@ export function LeadForm() {
   const [direction, setDirection] = useState<"forward" | "back">("forward")
   const formRef = useRef<HTMLElement>(null)
 
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const disposableDomains = ['tempmail', 'throwaway', 'fakeinbox', 'mailinator', 'guerrillamail', 'sharklasers', 'trashmail']
+    const domain = email.split('@')[1]?.toLowerCase() || ''
+    return emailRegex.test(email) && !disposableDomains.some(d => domain.includes(d))
+  }
+
+  const isValidPhone = (phone: string) => {
+    const digitsOnly = phone.replace(/\D/g, '')
+    // Must have 10 digits (US) and not be all same digit or sequential
+    if (digitsOnly.length !== 10) return false
+    if (/^(\d)\1{9}$/.test(digitsOnly)) return false // all same digit
+    if (digitsOnly.startsWith('0') || digitsOnly.startsWith('1')) return false // invalid area code
+    return true
+  }
+
   const canProceed = () => {
     switch (step) {
       case 0:
-        return formData.budgetFlexibility !== ""
+        return formData.name.trim().length >= 2
       case 1:
-        return formData.name.trim() !== ""
+        return isValidEmail(formData.email.trim())
       case 2:
-        return formData.email.trim() !== ""
-      case 3:
-        return formData.phone.trim() !== ""
+        return isValidPhone(formData.phone.trim())
       default:
         return false
     }
@@ -318,6 +305,14 @@ export function LeadForm() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-xl">
           <div className="rounded-2xl border border-border bg-card p-6 sm:p-10 shadow-sm">
+            <div className="text-center mb-8">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-foreground text-balance">
+                See If You Qualify for Our $5K Outdoor Transformation
+              </h2>
+              <p className="mt-3 text-foreground leading-relaxed">
+                Answer our quick form and we&apos;ll get in touch. No Pressure. No Obligation. Less than 60 Seconds.
+              </p>
+            </div>
             {submitted ? (
               <SuccessState />
             ) : (
@@ -335,27 +330,23 @@ export function LeadForm() {
                     )}
                   >
                     {step === 0 && (
-                      <StepFlexibility
-                        formData={formData}
-                        setFormData={setFormData}
-                      />
-                    )}
-                    {step === 1 && (
                       <StepName
                         formData={formData}
                         setFormData={setFormData}
                       />
                     )}
-                    {step === 2 && (
+                    {step === 1 && (
                       <StepEmail
                         formData={formData}
                         setFormData={setFormData}
+                        isValid={isValidEmail(formData.email.trim())}
                       />
                     )}
-                    {step === 3 && (
+                    {step === 2 && (
                       <StepPhone
                         formData={formData}
                         setFormData={setFormData}
+                        isValid={isValidPhone(formData.phone.trim())}
                       />
                     )}
                   </div>
