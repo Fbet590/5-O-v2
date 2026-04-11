@@ -18,7 +18,7 @@ export function Navbar() {
             alt="5-O Turf & Pavers logo"
             width={280}
             height={140}
-            className="h-[106px] w-auto"
+            className="h-[101px] w-auto"
             priority
           />
         </Link>
