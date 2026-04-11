@@ -24,7 +24,7 @@ export function Hero() {
             $5K. New Turf. New Pavers. New Outdoor Space. Done.
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-primary-foreground/90 max-w-xl">
-            Transform your yard into a neighborhood showpiece with our expert artificial turf, putting green, and paver installations. Year-round perfection, zero maintenance.
+            We handle everything from design to install — you just enjoy the result.
           </p>
           <div className="mt-10">
             <Button size="lg" asChild className="text-base px-8">
