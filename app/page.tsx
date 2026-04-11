@@ -2,7 +2,6 @@ import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
 import { LeadForm } from "@/components/lead-form"
 import { Services } from "@/components/services"
-import { WhyUs } from "@/components/why-us"
 import { Reviews } from "@/components/reviews"
 import { Gallery } from "@/components/gallery"
 import { Footer } from "@/components/footer"
@@ -15,7 +14,6 @@ export default function Home() {
       <LeadForm />
       <Services />
       <Reviews />
-      <WhyUs />
       <Gallery />
       <Footer />
     </main>
