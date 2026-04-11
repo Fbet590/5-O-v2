@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,14 +14,9 @@ import {
   ArrowRight,
   ArrowLeft,
   CheckCircle,
-  Sprout,
-  Target,
-  Blocks,
-  Home,
-  Trash2,
 } from "lucide-react"
 
-const TOTAL_STEPS = 6
+const TOTAL_STEPS = 4
 
 interface FormData {
   projectTypes: string[]
@@ -40,47 +35,6 @@ const initialFormData: FormData = {
   email: "",
   phone: "",
 }
-
-const projectOptions = [
-  {
-    value: "turf",
-    label: "Turf Installation",
-    icon: Sprout,
-  },
-  {
-    value: "pavers",
-    label: "Pavers (patio, walkway, or driveway)",
-    icon: Blocks,
-  },
-  {
-    value: "putting-green",
-    label: "Putting Green Installation",
-    icon: Target,
-  },
-  {
-    value: "full-remodel",
-    label: "Full Backyard Remodel",
-    icon: Home,
-  },
-  {
-    value: "trash-can-pad",
-    label: "Trash Can Paver Pad",
-    icon: Trash2,
-  },
-]
-
-const budgetOptions = [
-  { value: "10k-15k", label: "$10,000 - $15,000" },
-  { value: "15k-25k", label: "$15,000 - $25,000" },
-  { value: "25k-40k", label: "$25,000 - $40,000" },
-  { value: "40k+", label: "$40,000 +" },
-]
-
-const trashCanBudgetOptions = [
-  { value: "1k", label: "$1,000", description: "~100 sq ft" },
-  { value: "1.5k-1.8k", label: "$1,500 - $1,800", description: "~150-200 sq ft" },
-  { value: "2.5k+", label: "$2,500+", description: "200+ sq ft" },
-]
 
 const flexibilityOptions = [
   {
@@ -116,148 +70,6 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
           style={{ width: `${progress}%` }}
         />
       </div>
-    </div>
-  )
-}
-
-function StepProjectType({
-  formData,
-  setFormData,
-}: {
-  formData: FormData
-  setFormData: (data: FormData) => void
-}) {
-  const toggleProject = (value: string) => {
-    const updated = formData.projectTypes.includes(value)
-      ? formData.projectTypes.filter((v) => v !== value)
-      : [...formData.projectTypes, value]
-    setFormData({ ...formData, projectTypes: updated })
-  }
-
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h3 className="font-serif text-2xl tracking-tight text-foreground sm:text-3xl text-balance">
-          What type of project are you planning?
-        </h3>
-        <p className="mt-2 text-muted-foreground leading-relaxed">
-          Check all that apply.
-        </p>
-      </div>
-      <div className="flex flex-col gap-3">
-        {projectOptions.map((option) => {
-          const Icon = option.icon
-          const isChecked = formData.projectTypes.includes(option.value)
-          return (
-            <div
-              key={option.value}
-              role="button"
-              tabIndex={0}
-              onClick={() => toggleProject(option.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault()
-                  toggleProject(option.value)
-                }
-              }}
-              className={cn(
-                "flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 text-left transition-all",
-                isChecked
-                  ? "border-primary bg-primary/5"
-                  : "border-border bg-card hover:border-primary/40"
-              )}
-            >
-              <div
-                className={cn(
-                  "flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors",
-                  isChecked
-                    ? "border-primary bg-primary"
-                    : "border-muted-foreground/40 bg-card"
-                )}
-              >
-                {isChecked && (
-                  <svg
-                    className="h-3 w-3 text-primary-foreground"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={3}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
-              <div
-                className={cn(
-                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors",
-                  isChecked
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-muted-foreground"
-                )}
-              >
-                <Icon className="h-5 w-5" />
-              </div>
-              <span className="font-medium text-foreground">
-                {option.label}
-              </span>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-function StepBudget({
-  formData,
-  setFormData,
-}: {
-  formData: FormData
-  setFormData: (data: FormData) => void
-}) {
-  const allowedSmallProjects = ["trash-can-pad", "putting-green"]
-  const hasOnlySmallProjects =
-    formData.projectTypes.length > 0 &&
-    formData.projectTypes.every((type) => allowedSmallProjects.includes(type))
-
-  const options = hasOnlySmallProjects ? trashCanBudgetOptions : budgetOptions
-
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h3 className="font-serif text-2xl tracking-tight text-foreground sm:text-3xl text-balance">
-          {"What's your approximate budget for this project?"}
-        </h3>
-      </div>
-      <div className={cn("grid gap-3", hasOnlySmallProjects ? "sm:grid-cols-3" : "sm:grid-cols-2")}>
-        {options.map((option) => (
-          <button
-            key={option.value}
-            type="button"
-            onClick={() =>
-              setFormData({ ...formData, budget: option.value })
-            }
-            className={cn(
-              "rounded-xl border-2 p-5 text-center transition-all",
-              formData.budget === option.value
-                ? "border-primary bg-primary/5 text-foreground"
-                : "border-border bg-card text-foreground hover:border-primary/40"
-            )}
-          >
-            <span className="block font-semibold">{option.label}</span>
-            {"description" in option && (
-              <span className="block text-xs text-muted-foreground mt-1">
-                {option.description}
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
-      {hasOnlySmallProjects && (
-        <p className="text-xs text-muted-foreground text-center bg-secondary/50 rounded-lg py-2 px-3">
-          *Minimum of 100 sq ft needed for the project
-        </p>
-      )}
     </div>
   )
 }
@@ -428,16 +240,12 @@ export function LeadForm() {
   const canProceed = () => {
     switch (step) {
       case 0:
-        return formData.projectTypes.length > 0
-      case 1:
-        return formData.budget !== ""
-      case 2:
         return formData.budgetFlexibility !== ""
-      case 3:
+      case 1:
         return formData.name.trim() !== ""
-      case 4:
+      case 2:
         return formData.email.trim() !== ""
-      case 5:
+      case 3:
         return formData.phone.trim() !== ""
       default:
         return false
@@ -527,36 +335,24 @@ export function LeadForm() {
                     )}
                   >
                     {step === 0 && (
-                      <StepProjectType
-                        formData={formData}
-                        setFormData={setFormData}
-                      />
-                    )}
-                    {step === 1 && (
-                      <StepBudget
-                        formData={formData}
-                        setFormData={setFormData}
-                      />
-                    )}
-                    {step === 2 && (
                       <StepFlexibility
                         formData={formData}
                         setFormData={setFormData}
                       />
                     )}
-                    {step === 3 && (
+                    {step === 1 && (
                       <StepName
                         formData={formData}
                         setFormData={setFormData}
                       />
                     )}
-                    {step === 4 && (
+                    {step === 2 && (
                       <StepEmail
                         formData={formData}
                         setFormData={setFormData}
                       />
                     )}
-                    {step === 5 && (
+                    {step === 3 && (
                       <StepPhone
                         formData={formData}
                         setFormData={setFormData}
