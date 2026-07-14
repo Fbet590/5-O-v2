@@ -318,10 +318,10 @@ export function LeadForm() {
                 See If You Qualify for Our $5K Outdoor Transformation
               </h2>
               <p className="mt-3 text-foreground leading-relaxed">
-                This package applies to New Builds.
+                Fill Out Our Quick Form.
                 <br />
                 <br />
-                No Pressure. No Obligation. Less than 13 Seconds.
+                No Obligation. Less than 13 Seconds.
               </p>
             </div>
             {submitted ? (
