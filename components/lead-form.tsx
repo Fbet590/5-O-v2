@@ -107,8 +107,8 @@ function StepNewBuild({
       </div>
       <div className="grid grid-cols-2 gap-4">
         {[
-          { value: "yes", label: "Yes", emoji: "✓", desc: "Built recently or under construction" },
-          { value: "no", label: "No", emoji: "✗", desc: "Existing / established home" },
+          { value: "yes", label: "Yes", emoji: "✓", desc: "Built Recently" },
+          { value: "no", label: "No", emoji: "✗", desc: "Not A New Home" },
         ].map((option) => (
           <button
             key={option.value}
@@ -133,7 +133,7 @@ function StepNewBuild({
             </span>
             <p
               className={cn(
-                "text-xs leading-snug transition-colors",
+                "text-sm font-semibold leading-snug transition-colors",
                 formData.isNewBuild === option.value
                   ? "text-primary-foreground/80"
                   : "text-muted-foreground"
