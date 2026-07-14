@@ -410,38 +410,43 @@ export function LeadForm() {
       changeStep(step + 1, "forward")
     } else {
       setIsSubmitting(true)
-      const payload = {
-        isNewBuild: formData.isNewBuild,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        projectTypes: formData.projectTypes.join(", "),
-        budget: formData.budget,
-        budgetFlexibility: formData.budgetFlexibility,
-      }
+      const isQualified = formData.isNewBuild === "yes"
 
-      await Promise.allSettled([
-        fetch(
-          "https://services.leadconnectorhq.com/hooks/ESXofJNHbRPkOF25Yiyj/webhook-trigger/Wg87a8lNfjfHzR7TOaph",
-          {
+      if (isQualified) {
+        const payload = {
+          isNewBuild: formData.isNewBuild,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          projectTypes: formData.projectTypes.join(", "),
+          budget: formData.budget,
+          budgetFlexibility: formData.budgetFlexibility,
+        }
+
+        await Promise.allSettled([
+          fetch(
+            "https://services.leadconnectorhq.com/hooks/ESXofJNHbRPkOF25Yiyj/webhook-trigger/Wg87a8lNfjfHzR7TOaph",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            }
+          ),
+          fetch("https://hooks.zapier.com/hooks/catch/24750736/4yub4pj/", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
-          }
-        ),
-        fetch("https://hooks.zapier.com/hooks/catch/24750736/4yub4pj/", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        }),
-      ])
+          }),
+        ])
 
-      if (typeof window !== "undefined" && typeof window.fbq === "function") {
-        window.fbq("track", "Lead", {
-          content_name: formData.projectTypes.join(", "),
-          value: formData.budget,
-          currency: "USD",
-        })
+        if (typeof window !== "undefined" && typeof window.fbq === "function") {
+          window.fbq("track", "Lead", {
+            content_name: formData.projectTypes.join(", "),
+            value: formData.budget,
+            currency: "USD",
+          })
+        }
       }
+
       setIsSubmitting(false)
       setSubmitted(true)
     }
