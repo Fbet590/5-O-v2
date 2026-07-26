@@ -411,7 +411,7 @@ export function LeadForm() {
       changeStep(step + 1, "forward")
     } else {
       setIsSubmitting(true)
-      const isQualified = formData.isNewBuild === "yes" || formData.isNewBuild === "in-progress"
+      const isQualified = formData.isNewBuild === "yes"
 
       if (isQualified) {
         const payload = {
