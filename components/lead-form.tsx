@@ -105,9 +105,10 @@ function StepNewBuild({
           Is your home a new build?
         </h3>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-3">
         {[
           { value: "yes", label: "Yes", emoji: "✓", desc: "Built Recently" },
+          { value: "in-progress", label: "Yes", emoji: "✓", desc: "Not Built Yet, In Process of Being Built" },
           { value: "no", label: "No", emoji: "✗", desc: "Not A New Home" },
         ].map((option) => (
           <button
@@ -410,7 +411,7 @@ export function LeadForm() {
       changeStep(step + 1, "forward")
     } else {
       setIsSubmitting(true)
-      const isQualified = formData.isNewBuild === "yes"
+      const isQualified = formData.isNewBuild === "yes" || formData.isNewBuild === "in-progress"
 
       if (isQualified) {
         const payload = {
