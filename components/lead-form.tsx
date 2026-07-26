@@ -124,7 +124,7 @@ function StepNewBuild({
           >
             <span
               className={cn(
-                "flex h-12 w-12 items-center justify-center rounded-full text-xl font-bold transition-colors",
+                "flex h-12 w-12 items-center justify-center rounded-[24px] text-2xl font-bold transition-colors",
                 formData.isNewBuild === option.value
                   ? "bg-primary-foreground/20 text-primary-foreground"
                   : "bg-secondary text-primary"
@@ -134,7 +134,7 @@ function StepNewBuild({
             </span>
             <p
               className={cn(
-                "text-sm font-semibold leading-snug transition-colors",
+                "text-base font-semibold leading-snug transition-colors",
                 formData.isNewBuild === option.value
                   ? "text-primary-foreground/80"
                   : "text-muted-foreground"
