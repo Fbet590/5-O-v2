@@ -107,8 +107,8 @@ function StepNewBuild({
       </div>
       <div className="grid grid-cols-3 gap-3">
         {[
-          { value: "yes", label: "Yes", emoji: "✓", desc: "Built Recently, Just a Blank Slate" },
-          { value: "in-progress", label: "Yes", emoji: "✓", desc: "Not Built Yet, In Process of Being Built" },
+          { value: "yes", label: "Yes", emoji: "✓", desc: "RECENTLY BUILT -  Just a Blank Slate" },
+          { value: "in-progress", label: "Yes", emoji: "✓", desc: "NOT BUILT YET - \nIn Process of Being Built" },
           { value: "no", label: "No", emoji: "✗", desc: "Not A New Home" },
         ].map((option) => (
           <button
