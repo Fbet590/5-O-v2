@@ -21,7 +21,7 @@ export function Hero() {
             Premium Outdoor Solutions
           </p>
           <h1 className="font-serif font-black text-5xl leading-tight tracking-tight text-primary-foreground sm:text-6xl lg:text-7xl text-balance">
-            $5K. New Turf. New Pavers. New Outdoor Space. Done.
+            $7K. New Turf. New Pavers. New Outdoor Space. Done.
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-primary-foreground/90 max-w-xl">
             We handle everything from design to install — you just enjoy the result.
